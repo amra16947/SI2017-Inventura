@@ -1,0 +1,64 @@
+<div id="category-modal" class="modal">
+    <form ng-submit="$ctrl.saveCategory()" name="$ctrl.form" novalidate>
+        <div class="modal-content">
+            <h4>{{ $ctrl.item.id ? 'Izmjene kategorije' : 'Nova kategorija' }}</h4>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input type="text" id="name" name="name" placeholder="Naziv" ng-model="$ctrl.category.name" ng-pattern="/^[\sa-z\u0107\u010d\u0111\u0161\u017e0-9\-,&]{4,500}$/i" required>
+                    <label for="name">Naziv</label>
+                    <div class="user-errors" ng-show="$ctrl.form.$submitted">
+                        <span class="error" ng-show="$ctrl.form.name.$error.required">Naziv kategorije je obavezan.</span>
+                        <span class="error" ng-show="$ctrl.form.name.$error.pattern">Naziv kategorije mora sadržati između 4 i 500 znakova. Dozvoljena je upotreba slova, brojeva, povlake i razmaka.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <label>Nadkategorija</label>
+                    <select class="browser-default" ng-model="$ctrl.category.parent" ng-options="category.name for category in $ctrl.allCategories track by category.id">
+                        <option value="">Nema nadkategoriju</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" type="submit">Sačuvaj</button>
+        </div>
+    </form>
+</div>
+
+<h4>Kategorije</h4>
+
+<div class="row">
+    <div class="col s7 create-btn">
+        <a class="btn" ng-click="$ctrl.openModal()">Dodaj novu kategoriju</a>
+    </div>
+    <div class="input-field col s5">
+        <i class="material-icons prefix">search</i>
+        <input type="text" placeholder="Traži..." ng-model="$ctrl.searchText" ng-change="$ctrl.refresh()" ng-model-options="{ debounce: 200 }">
+    </div>
+</div>
+
+<table class="striped responsive-table">
+    <tr>
+        <th>Naziv</th>
+        <th>Nadkategorija</th>
+        <th></th>
+    </tr>
+    <tr ng-repeat="category in $ctrl.categories">
+        <td>{{ category.name }}</td>
+        <td>{{ $ctrl.getCategoryName(category.parent) }}</td>
+        <td>  
+            <a href="#" ng-click="$ctrl.edit(category.id)"><i class="material-icons">edit</i></a>
+            <a href="#" ng-click="$ctrl.delete(category.id)"><i class="material-icons">delete</i></a>
+        </td>
+    </tr>
+</table>
+
+<div class="right-align" ng-show="!$ctrl.searchText && $ctrl.totalPages > 1">
+    <ul class="pagination">
+        <li ng-class="{ 'disabled': $ctrl.number === 1}"><a href="#" ng-click="$ctrl.goto($ctrl.number - 1)"><i class="material-icons">chevron_left</i></a></li>
+        <li> {{ $ctrl.number }} / {{ $ctrl.totalPages }} </li>
+        <li ng-class="{ 'disabled': $ctrl.number === $ctrl.totalPages }"><a href="#" ng-click="$ctrl.goto($ctrl.number + 1)"><i class="material-icons">chevron_right</i></a></li>
+    </ul>
+</div>

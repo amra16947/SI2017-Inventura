@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col s6">
+        <h4>Inventura</h4>
+    </div>
+    <div class="col s6 finalize-btn right-align">
+        <button class="btn" type="button" ng-click="$ctrl.finalize()" ng-show="!$ctrl.audit.finished">Zaključi inventuru</button>
+    </div>
+</div>
+
+<table class="striped responsive-table">
+    <thead>
+        <tr>
+            <th>Inventurni broj</th>
+            <th>Naziv</th>
+            <th>Pronađeno?</th>
+            <th>Tačan inventurni broj?</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="auditItem in $ctrl.audit.auditItems">
+            <td>{{ auditItem.item.skuNumber }}</td>
+            <td>{{ auditItem.item.name }}</td>
+            <td>
+                <p>
+                    <input type="checkbox" id="present-{{ auditItem.id }}" ng-model="auditItem.present" ng-change="$ctrl.setPresent(auditItem)" ng-disabled="$ctrl.audit.finished">
+                    <label for="present-{{ auditItem.id }}"></label>
+                </p>
+            </td>
+            <td>
+                <p>
+                    <input type="checkbox" id="sku-correct-{{ auditItem.id }}" ng-model="auditItem.skuCorrect" ng-change="$ctrl.setSkuCorrect(auditItem)" ng-disabled="$ctrl.audit.finished">
+                    <label for="sku-correct-{{ auditItem.id }}"></label>
+                </p>
+            </td>
+            <td>
+                <select class="browser-default" ng-model="auditItem.status" ng-change="$ctrl.setStatus(auditItem)" ng-options="status.name for status in $ctrl.statuses track by status.id" ng-disabled="$ctrl.audit.finished">
+                    <option value="">Nepoznato</option>
+                </select>
+            </td>
+            <td class="right-align">
+                <div class="chip red" ng-if="auditItem.item.value >= 1000">Skupo</div>
+            </td>
+        </tr>
+    </tbody>
+</table>

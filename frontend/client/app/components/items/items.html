@@ -1,0 +1,182 @@
+<div id="item-modal" class="modal">
+    <form ng-submit="$ctrl.saveItem()" name="$ctrl.form" novalidate>
+        <div class="modal-content">
+            <h4>{{ $ctrl.item.id ? 'Izmjeni inventurnu stavku' : 'Nova inventurna stavka' }}</h4>
+            <!--<div class="row">
+                <div class="input-field col s12">
+                        <input type="text" id="skuNumber" name="skuNumber" placeholder="Inventurni broj" ng-model="$ctrl.item.skuNumber" ng-pattern="/^[a-z0-9]{4,45}$/i" required>
+                        <label for="skuNumber">Inventurni broj</label>
+                        <div class="user-errors" ng-show="$ctrl.form.$submitted">
+                            <span class="error" ng-show="$ctrl.form.skuNumber.$error.required">Inventurni broj je obavezan.</span>
+                        </div>
+                </div>
+            </div>-->
+            <div class="row">
+                <div class="input-field col s12">
+                    <input type="text" id="name" name="name" placeholder="Naziv" ng-model="$ctrl.item.name" ng-pattern="/^[a-z\u0107\u010d\u0111\u0161\u017e][a-z\u0107\u010d\u0111\u0161\u017e0-9]{1,255}$/ui" required>
+                    <label for="name">Naziv</label>
+                    <div class="user-errors" ng-show="$ctrl.form.$submitted">
+                        <span class="error" ng-show="$ctrl.form.name.$error.required">Naziv je obavezan.</span>
+                        <span class="error" ng-show="$ctrl.form.name.$error.pattern">Naziv mora imati najmanje 2 znaka, od kojih je prvo slovo, a ostali su slova ili brojevi.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input type="text" id="purchased-by" name="purchasedBy" placeholder="Unio" ng-model="$ctrl.item.purchasedBy" ng-pattern="/^[\sa-z\u0107\u010d\u0111\u0161\u017e]{4,45}$/i" required>
+                    <label for="purchased-by">Unio</label>
+                    <div class="user-errors" ng-show="$ctrl.form.$submitted">
+                        <span class="error" ng-show="$ctrl.form.purchasedBy.$error.required">Obavezno polje.</span>
+                        <span class="error" ng-show="$ctrl.form.purchasedBy.$error.pattern">Polje mora sadržati između 4 i 45 znakova. Dozvoljena je upotreba slova i razmaka.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input type="text" id="person-responsible" name="personResponsible" placeholder="Odgovorna osoba" ng-model="$ctrl.item.personResponsible" ng-pattern="/^[\sa-z\u0107\u010d\u0111\u0161\u017e]{4,45}$/i" required>
+                    <label for="person-responsible">Odgovorna osoba</label>
+                    <div class="user-errors" ng-show="$ctrl.form.$submitted">
+                        <span class="error" ng-show="$ctrl.form.personResponsible.$error.required">Obavezno polje.</span>
+                        <span class="error" ng-show="$ctrl.form.personResponsible.$error.pattern">Polje mora sadržati između 4 i 45 znakova. Dozvoljena je upotreba slova i razmaka.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input type="number" id="value" step="0.01" min="0" max="9999999999999.99" name="value" placeholder="Vrijednost" ng-model="$ctrl.item.value" required>
+                    <label for="value">Vrijednost</label>
+                    <div class="user-errors" ng-show="$ctrl.form.$submitted">
+                        <span class="error" ng-show="$ctrl.form.value.$error.required">Obavezno polje.</span>
+                        <span class="error" ng-show="$ctrl.form.value.$error.max">Maksimalni dozvoljeni broj je 9999999999999.99.</span>
+                        <span class="error" ng-show="$ctrl.form.value.$error.min">Vrijednost inventurne stavke ne može biti negativna.</span>
+                        <span class="error" ng-show="$ctrl.form.value.$error.step">Broj smije imati najviše dvije decimale.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input type="date" class="datepicker" id="date-of-purchase" format="yyyy-mm-dd" ng-model="$ctrl.item.dateOfPurchase" name="dateOfPurchase" md-min-date="$ctrl.minDate" required>
+                    <label for="date-of-purchase">Datum unosa</label>
+                    <div class="user-errors" ng-show="$ctrl.form.$submitted">
+                        <span class="error" ng-show="$ctrl.form.dateOfPurchase.$error.required">Datum unosa je obavezan.</span>
+                        <span class="error" ng-show="$ctrl.form.dateOfPurchase.$error.date">Uneseni datum nije ispravan.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <label>Mjerna jedinica</label>
+                    <select name="unitOfMeasurement" class="browser-default" ng-model="$ctrl.item.unitOfMeasurement" required>
+                        <option value="" disabled selected>Mjerna jedinica</option>
+                        <option value="kom">kom</option>
+                        <option value="kg">kg</option>
+                        <option value="m">m</option>
+                    </select>
+                    <div class="user-errors" ng-show="$ctrl.form.$submitted">
+                        <div class="error" ng-show="$ctrl.form.unitOfMeasurement.$error.required">Mjerna jedinica je obavezna.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <label>Kategorija</label>
+                    <select name="category" class="browser-default" ng-model="$ctrl.item.category" ng-options="category.name for category in $ctrl.categories track by category.id" required>
+                        <option value="" disabled selected>Izaberite kategoriju</option>
+                    </select>
+                    <div class="user-errors" ng-show="$ctrl.form.$submitted">
+                        <div class="error" ng-show="$ctrl.form.category.$error.required">Kategorija je obavezna.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <label>Lokacija</label>
+                    <select name="location" class="browser-default" ng-model="$ctrl.item.location" ng-options="location.name for location in $ctrl.locations track by location.id" required>
+                        <option value="" disabled selected>Izaberite lokaciju</option>
+                    </select>
+                    <div class="user-errors" ng-show="$ctrl.form.$submitted">
+                        <div class="error" ng-show="$ctrl.form.location.$error.required">Lokacija je obavezna.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" type="submit">Sačuvaj</button>
+        </div>
+    </form>
+</div>
+
+<h4>Inventurne stavke</h4>
+
+<div class="row" show-for-role="ROLE_ADMIN">
+    <div class="col s7 create-btn">
+        <a class="btn" ng-click="$ctrl.openModal()">Dodaj novu inventurnu stavku</a>
+    </div>
+    <div class="input-field col s5">
+        <i class="material-icons prefix">search</i>
+        <input type="text" placeholder="Traži..." ng-model="$ctrl.searchText" ng-change="$ctrl.refresh()" ng-model-options="{ debounce: 200 }">
+    </div>
+</div>
+
+<table class="striped responsive-table">
+    <thead>
+        <tr>
+            <th>Inventurni broj</th>
+            <th>Naziv</th>
+            <th>Unio</th>
+            <th>Odgovorna osoba</th>
+            <th>Vrijednost</th>
+            <th>Datum unosa</th>
+            <th>Mjerna jedinica</th>
+            <th>Kategorija</th>
+            <th>Lokacija</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="item in $ctrl.items">
+            <td>{{ item.skuNumber }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.purchasedBy }}</td>
+            <td>{{ item.personResponsible }}</td>
+            <td>{{ item.value | currency : '' }} KM</td>
+            <td>{{ item.dateOfPurchase | date : 'dd/MM/yyyy' }}</td>
+            <td>{{ item.unitOfMeasurement }}</td>
+            <td>{{ item.category.name }} </td>
+            <td>{{ item.location.name }} </td>
+            <td  show-for-role="ROLE_ADMIN">
+                <a href="#" ng-click="$ctrl.edit(item.id)"><i class="material-icons">edit</i></a>
+                <a href="#" ng-click="$ctrl.delete(item.id)"><i class="material-icons">delete</i></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="right-align" ng-show="!$ctrl.searchText && $ctrl.totalPages > 1">
+    <ul class="pagination">
+        <li ng-class="{ 'disabled': $ctrl.number === 1}"><a href="#" ng-click="$ctrl.goto($ctrl.number - 1)"><i class="material-icons">chevron_left</i></a></li>
+        {{ $ctrl.number }} / {{ $ctrl.totalPages }}
+        <li ng-class="{ 'disabled': $ctrl.number === $ctrl.totalPages }"><a href="#" ng-click="$ctrl.goto($ctrl.number + 1)"><i class="material-icons">chevron_right</i></a></li>
+    </ul>
+</div>
+
+
+<script>
+    $('.datepicker').pickadate({
+        // Translations
+        monthsFull: ['januar', 'februar', 'mart', 'april', 'maj', 'juni', 'july', 'august', 'septembar', 'oktobar', 'novembar', 'decembar'],
+        monthsShort: ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
+        weekdaysFull: ['nedjelja', 'ponedjeljak', 'utorak', 'srijeda', 'četvrtak', 'petak', 'subota'],
+        weekdaysShort: ['ne', 'po', 'ut', 'sr', 'če', 'pe', 'su'],
+        today: 'Danas',
+        clear: 'Počisti',
+        close: false,
+        firstDay: 1,
+        format: 'yyyy-mm-dd',
+        container: 'body',
+        max: 'today',
+        min: -365
+       
+    });
+
+</script>

@@ -1,0 +1,44 @@
+<h4>Moj račun</h4>
+
+<div class="card-panel teal lighten-5">
+    <form ng-submit="$ctrl.save()" name="$ctrl.form" novalidate>
+        <div class="row">
+            <div class="input-field col s12">
+                <input type="text" id="full-name" name="fullName" placeholder="Ime i prezime" ng-model="$ctrl.myAccount.fullName" disabled>
+                <label for="full-name">Ime i prezime</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <input type="text" id="username" name="username" placeholder="Korisničko ime" ng-model="$ctrl.myAccount.username" disabled>
+                <label for="username">Korisničko ime</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <input type="text" id="email" name="email" placeholder="E-mail adresa" ng-model="$ctrl.myAccount.email" disabled>
+                <label for="email">E-mail adresa</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <input type="password" id="new-password" name="newPassword" placeholder="Nova lozinka" ng-model="$ctrl.myAccount.newPassword" minlength="8" autofocus>
+                <label for="new-password">Nova lozinka</label>
+                <div class="user-errors" ng-show="$ctrl.form.$submitted">
+                    <span class="error" ng-show="$ctrl.form.newPassword.$error.minlength">Lozinka ne smije biti kraća od 8 znakova.</span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <input type="password" id="current-password" name="currentPassword" placeholder="Trenutna lozinka" ng-model="$ctrl.myAccount.currentPassword" minlength="8" required>
+                <label for="current-password">Trenutna lozinka</label>
+                <div class="user-errors" ng-show="$ctrl.form.$submitted">
+                    <span class="error" ng-show="$ctrl.form.currentPassword.$error.required">Trenutna lozinka je obavezna.</span>
+                    <span class="error" ng-show="$ctrl.form.currentPassword.$error.minlength">Lozinka ne može biti kraća od 8 znakova.</span>
+                </div>
+            </div>
+        </div>
+        <button class="btn" type="submit">Sačuvaj</button>
+    </form>
+</div>

@@ -1,0 +1,11 @@
+.accounts {
+  color: red;
+}
+
+.pageBtn{
+  &:disabled {
+    cursor: default;
+    &:hover { box-shadow: none; }
+    color: lightgray;
+  }
+}

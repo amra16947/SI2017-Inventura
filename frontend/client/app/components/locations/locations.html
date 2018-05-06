@@ -1,0 +1,77 @@
+<div id="location-modal" class="modal">
+    <form ng-submit="$ctrl.saveLocation()" name="$ctrl.form" novalidate>
+        <div class="modal-content">
+            <h4>{{ $ctrl.item.id ? 'Izmjene lokacije' : 'Nova lokacija' }}</h4>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input type="text" id="edit-name" name="name" placeholder="Naziv" ng-model="$ctrl.location.name" ng-pattern="/^[\sa-z\u0107\u010d\u0111\u0161\u017e0-9\-,&]{4,500}$/i" required>
+                    <label for="edit-name">Naziv</label>
+                    <div class="user-errors" ng-show="$ctrl.form.$submitted">
+                        <span class="error" ng-show="$ctrl.form.name.$error.required">Naziv lokacije je obavezan.</span>
+                        <span class="error" ng-show="$ctrl.form.name.$error.pattern">Naziv kategorije mora sadržati između 4 i 500 znakova. Dozvoljena je upotreba slova, brojeva, povlake i razmaka.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <label>Nadlokacija</label>
+                    <select class="browser-default" ng-model="$ctrl.location.parent" ng-options="location.name for location in $ctrl.locations track by location.id">
+                        <option value="">Odaberite nadlokaciju</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <label>Tip</label>
+                    <select name="type" class="browser-default" ng-model="$ctrl.location.type" ng-options="locationType.name for locationType in $ctrl.locationTypes track by locationType.id" required>
+                        <option value="">Odaberite tip</option>
+                    </select>
+                    <div class="user-errors" ng-show="$ctrl.form.$submitted">
+                        <div class="error" ng-show="$ctrl.form.type.$error.required">Tip lokacije je obavezan.</div>
+                    </div>
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" type="submit">Sačuvaj</button>
+        </div>
+    </form>
+</div>
+
+<h4>Lokacije</h4>
+
+<div class="row">
+    <div class="col s7 create-btn">
+        <a class="btn" ng-click="$ctrl.openModal()">Dodaj novu lokaciju</a>
+    </div>
+    <div class="input-field col s5">
+        <i class="material-icons prefix">search</i>
+        <input type="text" placeholder="Traži..." ng-model="$ctrl.searchText" ng-change="$ctrl.refresh()" ng-model-options="{ debounce: 200 }">
+    </div>
+</div>
+
+<table class="striped">
+    <tr>
+        <th>Naziv</th>
+        <th>Nadlokacija</th>
+        <th>Tip</th>
+        <th></th>
+    </tr>
+    <tr ng-repeat="location in $ctrl.locations">
+        <td>{{ location.name }}</td>
+        <td>{{ location.parent.name }}</td>
+        <td>{{ location.type.name }}</td>
+        <td>  
+            <a href="#" ng-click="$ctrl.edit(location.id)"><i class="material-icons">edit</i></a>
+            <a href="#" ng-click="$ctrl.delete(location.id)"><i class="material-icons">delete</i></a>
+        </td>
+    </tr>
+</table>
+
+<div class="right-align" ng-show="!$ctrl.searchText && $ctrl.totalPages > 1">
+    <ul class="pagination">
+        <li ng-class="{ 'disabled': $ctrl.number === 1}"><a href="#" ng-click="$ctrl.goto($ctrl.number - 1)"><i class="material-icons">chevron_left</i></a></li>
+        <li> {{ $ctrl.number }} / {{ $ctrl.totalPages }} </li>
+        <li ng-class="{ 'disabled': $ctrl.number === $ctrl.totalPages }"><a href="#" ng-click="$ctrl.goto($ctrl.number + 1)"><i class="material-icons">chevron_right</i></a></li>
+    </ul>
+</div>

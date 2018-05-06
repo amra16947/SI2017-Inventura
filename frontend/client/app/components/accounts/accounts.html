@@ -1,0 +1,105 @@
+<div id="user-modal" class="modal">
+	<form ng-submit="$ctrl.saveAccount()" name="$ctrl.form" novalidate>
+		<div class="modal-content">
+			<h4>{{ $ctrl.account.id ? 'Izmjene korisničkog računa' : 'Novi korisnički račun' }}</h4>
+			<div class="row">
+				<div class="input-field col s12">
+					<input type="text" id="full-name" name="fullName" placeholder="Ime i prezime" ng-model="$ctrl.account.fullName" ng-pattern="/^[\sa-z\u0107\u010d\u0111\u0161\u017e]{4,255}$/i" required>
+					<label for="full-name">Ime i prezime</label>
+					<div class="user-errors" ng-show="$ctrl.form.$submitted">
+						<span class="error" ng-show="$ctrl.form.fullName.$error.required">Ime i prezime je obavezno.</span>
+						<span class="error" ng-show="$ctrl.form.fullName.$error.pattern">Ime i prezime mora sadržati između 4 i 255 znakova. Dozvoljena je upotreba slova i razmaka.</span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+					<input type="text" id="username" name="username" placeholder="Korisničko ime" ng-model="$ctrl.account.username" ng-pattern="/^[a-z][a-z0-9]{3,16}$/i" required>
+					<label for="username">Korisničko ime</label>
+					<div class="user-errors" ng-show="$ctrl.form.$submitted">
+						<span class="error" ng-show="$ctrl.form.username.$error.required">Korisničko ime je obavezno.</span>
+						<span class="error" ng-show="$ctrl.form.username.$error.pattern">Korisničko ime mora biti između 4 i 16 znakova, od kojih je prvo slovo, a ostalo su slova ili brojevi.</span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+					<input type="email" id="email" name="email" placeholder="E-mail adresa" ng-model="$ctrl.account.email" maxlength="255" required>
+					<label for="email">E-mail adresa</label>
+					<div class="user-errors" ng-show="$ctrl.form.$submitted">
+						<span class="error" ng-show="$ctrl.form.email.$error.required">E-mail adresa je obavezna.</span>
+						<span class="error" ng-show="$ctrl.form.email.$error.email">Nije unesena ispravna e-mail adresa.</span>
+					</div>
+				</div>
+			</div>
+			<div class="row" ng-hide="$ctrl.account.id">
+				<div class="input-field col s12">
+					<input type="password" id="password" name="password" placeholder="Lozinka" ng-model="$ctrl.account.password" minlength="8">
+					<label for="password">Lozinka</label>
+					<div class="user-errors" ng-show="$ctrl.form.$submitted">
+						<span class="error" ng-show="$ctrl.form.password.$error.minlength">Lozinka ne smije biti kraća od 8 znakova.</span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12">
+					<label>Tip korisnika</label>
+					<select name="type" class="browser-default" ng-model="$ctrl.account.role" ng-options="role.name for role in $ctrl.roles track by role.id" required>
+					</select>
+					<div class="user-errors" ng-show="$ctrl.form.$submitted">
+						<span class="error" ng-show="$ctrl.form.type.$error.required">Tip korisnika mora biti odabran.</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+            <button class="btn" type="submit">Sačuvaj</button>
+        </div>
+	</form>
+</div>
+
+<h4>Korisnički računi</h4>
+
+<div class="row">
+    <div class="col s7 create-btn">
+        <a class="btn" ng-click="$ctrl.openModalcreate()">Dodaj novog korisnika </a>
+    </div>
+    <div class="input-field col s5">
+        <i class="material-icons prefix">search</i>
+        <input type="text" placeholder="Traži..." ng-model="$ctrl.searchText" ng-change="$ctrl.refresh()" ng-model-options="{ debounce: 200}">
+    </div>
+</div>
+
+<table class="striped responsive-table">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Ime i prezime</th>
+			<th>Korisničko ime</th>
+			<th>Email</th>
+			<th>Tip</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="account in $ctrl.accounts">
+			<td>{{ account.id }}</td>
+			<td>{{ account.fullName }}</td>
+			<td>{{ account.username }}</td>
+			<td>{{ account.email }}</td>
+			<td>{{ account.role.name }}</td>
+			<td>
+				<a href="#" ng-click="$ctrl.edit(account.id)"><i class="material-icons">edit</i></a>
+				<a href="#" ng-click="$ctrl.delete(account.id)"><i class="material-icons">delete</i></a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<div class="right-align" ng-show="!$ctrl.searchText && $ctrl.totalPages > 1">
+	<ul class="pagination">
+		<li ng-class="{ 'disabled': $ctrl.number === 1}"><a href="#" ng-click="$ctrl.goto($ctrl.number - 1)"><i class="material-icons">chevron_left</i></a></li>
+		<li> {{ $ctrl.number }} / {{ $ctrl.totalPages }} </li>
+		<li ng-class="{ 'disabled': $ctrl.number === $ctrl.totalPages }"><a href="#" ng-click="$ctrl.goto($ctrl.number + 1)"><i class="material-icons">chevron_right</i></a></li>
+	</ul>
+</div>

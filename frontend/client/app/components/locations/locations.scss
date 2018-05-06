@@ -1,0 +1,12 @@
+.locations {
+  color: yellow;
+}
+
+.pageBtn{
+  &:disabled {
+    //background-color: darkgray;
+    cursor: default;
+    &:hover { box-shadow: none; }
+    color: lightgray;
+  }
+}
